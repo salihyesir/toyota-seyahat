@@ -1,15 +1,13 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Toyota Projesi
 
-### What is this repository for? ###
-
-Toyota projesi
-
-### How do I get set up? ###
-
-* Maven + CXF + Spring + Hibernate => RESTFUL WebService 
-
+Proje Maven tabanlıdır.
+Server: Apache Tomcat
+Database: MySQL
+Front-end: BackboneJs, Underscore, Bootstrap, JSP
+Business Layer: Spring, JavaServlet, Apache CXF
+Persistence Layer: JPA & Hibernate
 
 #######################################
 
