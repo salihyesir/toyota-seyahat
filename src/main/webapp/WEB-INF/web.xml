@@ -1,0 +1,84 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<!-- web.xml: web projemizin konfigrasyonlarının yapıldığı kısım-->
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+  <display-name>Simple CXF Rest</display-name>
+
+
+
+  <!-- Spring konfigrasyonlarının projeye tanıtılması-->
+  <!-- Bu kısım da hata varsa 404 basılır-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:application-context.xml</param-value>
+  </context-param>
+
+
+  <servlet>
+    <description></description>
+    <display-name>LoginServlet</display-name>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.toyota.esy.login.LoginServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LogoutServlet</display-name>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>com.toyota.esy.login.LogoutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/LogoutServlet</url-pattern>
+  </servlet-mapping>
+
+
+
+
+
+
+
+  <!-- Tanıttığımız konfigrasyonların dinlenmesi
+  Bu kısım silinirse servis yok olur-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!-- CXF aktif hale getirildi -->
+  <!--CXF:Webservis(SOAP ve restful protoklelerini destekler) geliştirmek için kullanılan bir framework-->
+  <!--JAX-WS (SOAP, JSR-224) hem JAX-RS(REST, JSR-311).destekler-->
+  <!--JAX-WS ve JAX-RS sadece spesifikasyon yani neyin nasıl yapılcağının tanımı-->
+  <!--load-on-startup 1 olmasının sebebi java.sun .....xsd referans olarak alıyor
+  orada 1 olarak belirtilmiş calısması için 1 olunca pozitif olarak bakara ve sunucu
+  başlatır.-->
+
+  <servlet>
+    <servlet-name>CXFServlet</servlet-name>
+    <servlet-class>
+      org.apache.cxf.transport.servlet.CXFServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!-- CXF calışılcağı url belirtildi -->
+  <servlet-mapping>
+    <servlet-name>CXFServlet</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+
+  <!--welcome file-->
+  <welcome-file-list>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SimpleCXFRest:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="SimpleCXFRest.war">
+      <element id="artifact" artifact-name="SimpleCXFRest:war exploded" />
+    </root>
+  </artifact>
+</component>

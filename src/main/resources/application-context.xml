@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--namespace tanimlamalari şemalar-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+                http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <!-- Bu kısımda CXF'i import ediyoruz CXF in ihtiyacı icin silinsede calışabilir
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />-->
+
+
+    <!-- Projede bulunan java beanleri tespit edip icerisindeki anatasyonları aktif eder-->
+    <!--Autowired notasyonu için-->
+    <context:annotation-config />
+
+    <!--Anotasyonları olan sınıflarda bağımlılıkları yönetir-->
+    <!--
+| Annotation | Meaning                                             |
+| @Component | generic stereotype for any Spring-managed component |
+| @Repository| stereotype for persistence layer                    |
+| @Service   | stereotype for service layer                        |
+| @Controller| stereotype for presentation layer (spring-mvc)      |
+-->
+
+    <context:component-scan base-package="com.toyota.esy"/>
+<!--@Component notasyonu Spring’ in otomatik arama islemlerinde bu notasyon ile isaretlenen sinifi
+ dikkate almasini ve gerekli baglama islemlerini yapmasini saglar.-->
+    <!--Component notasyonunun özelleştirilmiş hali Service Repository Controller( stereotype annotation)-->
+<!--@Controller notasyonunu Spring MVC siniflari
+@Service notasyonu web service siniflarinda
+@Repository database/ dao /persistence siniflarinda tercih edilir.-->
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+
+    <!-- Transaction notasyonları bulunan metotların roll back işlemlerini yönetir.
+     Eğer rolback atılsın istenmiyorsa  @Transactional(noRollBackFor = RuntimeException.class) için metota hatayı tanımlamayı unutma
+     public metot()throw RuntimeException
+     Eğer sadece belli bir exception ile rollback başlatılsın isteniyorsa rollbackFor kullanılıyor. Örnek
+@Transactional(propagation = Propagation.REQURIES_NEW, rollbackFor = SQLException.class)-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- DATA Source -->
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <!-- driver konfigrasyonu-->
+        <!--usslfalse uyarıları kaldırmak için mysql ssl uyarıları
+        amp > & demek utf8 türkçe karakter sıkıntısını atlatdık
+        -->
+        <property name="url" value="jdbc:mysql://localhost:3306/travelmanagement?characterEncoding=UTF-8&amp;useSSL=false"/>
+        <!--url kongigrasoynu-->
+        <property name="username" value="root" />
+        <!--username konfigrasyonu-->
+        <property name="password" value="" />
+        <!--parola konfigrasyonu-->
+    </bean>
+
+
+    <!-- Entity Manager Factory -->
+    <!--persist : Entity nesnesini veritabanına insert eder . Veritabanında INSERT betiği çalışır .-->
+    <!--get : Veritabanından parametre olarak verilen Id bilgisine sahip nesneyi getirir-->
+    <!--remove : Parametre olarak verilen entity bilgisini veritabanından siler-->
+    <!--merge : Entity bilgisini veritabanında günceller-->
+    <!--detach : EntityManager ile ilişkilendirilmiş ve commit sonrası veritabanına kaydedilecek olan
+    POJO nesnesinin EntityManager ile ilişkisini keser . Entity vertiabanına kaydedilmez-->
+    <!--clear : EntityManager ile ilişkilendirilmiş olan tüm nesnelerin ilişkisini kaldırır . -->
+    <!--flush : EntityManager ile ilişkilendirilmiş olan tüm nesneler için sorguların çalıştırılması sağlanır.  Fakat commit edilmez -->
+    <!--refresh : Veritabanından okunan POJO bilgileri üzerinden yapılan değişiklikleri geri alır. refresh metodundan sonra POJO eski haline döner. -->
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceUnitName" value="Toyota" />
+    </bean>
+
+
+
+    <!--http://stackoverflow.com/questions/14400193/jackson-json-not-working-with-cxf
+    Jackson konfigrasyon icin => https://cxf.apache.org/docs/jax-rs-data-bindings.html
+    http://www.javatips.net/blog/cxf-restful-tutorial?page=2
+    https://mahichir.wordpress.com/tag/json/-->
+    <!-- Servisin  sağlayıcısını tanımladık -->
+    <bean id='jacksonProvider' class='org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider' />
+    <!-- JAX-RS -->
+    <jaxrs:server id="restContainer" address="/">
+        <jaxrs:serviceBeans>
+            <ref bean="traveldetailsResource"/>
+            <ref bean="userResource"/>
+            <ref bean="exportToExcel"/>
+        </jaxrs:serviceBeans>
+        <!-- Sağlayıcıyı kullandık-->
+        <jaxrs:providers>
+            <ref bean='jacksonProvider' />
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <!-- Beans -->
+    <bean id="mail" class="com.toyota.esy.service.MailReportService"/>
+    <bean id="methodJobDetailBean"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+          p:concurrent="false" p:targetObject-ref="mail" p:targetMethod="bulkMessaging" />
+
+    <!-- For Testing -->
+    <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+          p:jobDetail-ref="methodJobDetailBean" p:startDelay="900000"
+          p:repeatInterval="86400000" />
+    <!--600000 10 dk  86400000 1 gün 1500000 25 dk 900000 15dk-->
+
+    <!--<bean id="methodJobDetailBeanTwo"-->
+          <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"-->
+          <!--p:concurrent="false" p:targetObject-ref="mail" p:targetMethod="personalMessaging" />-->
+
+    <!--<bean id="simpleTriggerTwo" class="org.springframework.scheduling.quartz.SimpleTriggerBean"-->
+          <!--p:jobDetail-ref="methodJobDetailBean" p:startDelay="20000"-->
+          <!--p:repeatInterval="120000" />-->
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          p:waitForJobsToCompleteOnShutdown="true">
+        <property name="triggers">
+            <list>
+                <ref bean="simpleTrigger"/>
+                <!--<ref bean="simpleTriggerTwo"/>-->
+            </list>
+        </property>
+    </bean>
+
+
+</beans>
+
+        <!-- http://cxf.apache.org/docs/jax-rs-and-jax-ws.html -->

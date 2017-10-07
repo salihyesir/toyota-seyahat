@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="travelmanagement@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="travelmanagement">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="performance_schema"/>
+    <schema id="6" parent="1" name="sys"/>
+    <table id="7" parent="2" name="roles"/>
+    <table id="8" parent="2" name="traveldetails"/>
+    <table id="9" parent="2" name="users"/>
+    <column id="10" parent="7" name="RoleId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="11" parent="7" name="RoleName">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="12" parent="7" name="PRIMARY">
+      <ColNames>RoleId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="13" parent="8" name="TravelId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="14" parent="8" name="TravelLocation">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="15" parent="8" name="TravelMission">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="16" parent="8" name="ProjectCode">
+      <Position>5</Position>
+      <DataType>varchar(5)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="17" parent="8" name="TravelStartDate">
+      <Position>6</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="18" parent="8" name="TravelFinishDate">
+      <Position>7</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="19" parent="8" name="IsDeleted">
+      <Position>9</Position>
+      <DataType>bit(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="20" parent="8" name="UserId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="21" parent="8" name="EstimatedCost">
+      <Position>8</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <index id="22" parent="8" name="UserId_idx">
+      <ColNames>UserId</ColNames>
+    </index>
+    <key id="23" parent="8" name="PRIMARY">
+      <ColNames>TravelId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="24" parent="8" name="UserId">
+      <ColNames>UserId</ColNames>
+      <RefSchemaName>travelmanagement</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>UserId</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+    <column id="25" parent="9" name="UserId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="26" parent="9" name="UserName">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="9" name="UserRegister">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="9" name="UserPassword">
+      <Position>4</Position>
+      <DataType>varchar(45)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="29" parent="9" name="Notification">
+      <Position>8</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="30" parent="9" name="IsDeleted">
+      <Position>9</Position>
+      <DataType>bit(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="31" parent="9" name="UserDepartment">
+      <Position>5</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="32" parent="9" name="DepartmentAdmin">
+      <Position>6</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="33" parent="9" name="RoleId">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="34" parent="9" name="UserMail">
+      <Position>10</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="35" parent="9" name="RoleId_idx">
+      <ColNames>RoleId</ColNames>
+    </index>
+    <index id="36" parent="9" name="UserRegister_UNIQUE">
+      <ColNames>UserRegister</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="37" parent="9" name="UserMail_UNIQUE">
+      <ColNames>UserMail</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="38" parent="9" name="PRIMARY">
+      <ColNames>UserId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="39" parent="9" name="UserRegister_UNIQUE">
+      <ColNames>UserRegister</ColNames>
+      <UnderlyingIndexName>UserRegister_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="40" parent="9" name="UserMail_UNIQUE">
+      <ColNames>UserMail</ColNames>
+      <UnderlyingIndexName>UserMail_UNIQUE</UnderlyingIndexName>
+    </key>
+    <foreign-key id="41" parent="9" name="RoleId">
+      <ColNames>RoleId</ColNames>
+      <RefSchemaName>travelmanagement</RefSchemaName>
+      <RefTableName>roles</RefTableName>
+      <RefColNames>RoleId</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+  </database-model>
+</dataSource>
