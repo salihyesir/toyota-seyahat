@@ -13,10 +13,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 
-/**
- *
- * @author Emre-PC
- */
+
 @Entity
 @Table(name = "roles")
 public class Roles implements Serializable {

@@ -14,10 +14,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 
-/**
- *
- * @author Emre-PC
- */
+
 @Entity
 @Table(name = "users")
 public class Users implements Serializable {
